@@ -283,6 +283,16 @@ def main():
             print(f"Skipping '{file_path}': expected <environment>/<stack>/docker-compose.yml")
             continue
 
+        if not os.path.isfile(file_path):
+            # A deleted stack: never destroy running containers from CI, but say
+            # it loudly so the leftover project gets cleaned up by hand.
+            print(
+                f"WARNING: '{file_path}' no longer exists (stack removed from the repo) - "
+                "skipping. Delete the Arcane project manually if the stack must go away.",
+                file=sys.stderr,
+            )
+            continue
+
         environment_name = parts[0]
         stack_name = parts[1]
         print(f"Deploying {file_path} -> environment '{environment_name}', stack '{stack_name}'")
