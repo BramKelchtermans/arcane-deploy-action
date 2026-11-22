@@ -97,6 +97,9 @@ forwarded from `environment_file`, exactly like the Portainer action.
 
 ## Notes
 
+- Stack removals are **not** automatic: if a `docker-compose.yml` disappears from
+  the change set, the action logs a warning and leaves the running project alone.
+  Delete the Arcane project from the UI/API when the stack must really go.
 - Arcane writes the stack to `<projects directory>/<stack>/compose.yaml` and
   `.env` on the host, owned by uid 65532 — the projects directory must be
   writable by that uid.
