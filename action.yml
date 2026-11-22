@@ -1,0 +1,47 @@
+name: Deploy to Arcane
+description: Deploys Docker Compose files to an Arcane instance.
+author: Bram Kelchtermans
+
+branding:
+  icon: upload-cloud
+  color: blue
+
+inputs:
+  arcane_url:
+    description: 'The URL of the Arcane manager (e.g. http://10.2.0.119:3552)'
+    required: true
+    default: ''
+  arcane_api_key:
+    description: 'The Arcane API key (sent as the X-Api-Key header)'
+    required: true
+    default: ''
+  changed_files_path:
+    description: 'Path to the file containing changed Docker Compose files'
+    required: true
+    default: ''
+  environment_file:
+    description: 'The environment file to use for the deployment'
+    required: false
+    default: 'default'
+  deploy_action:
+    description: 'Arcane deploy action: "up" (compose up) or "redeploy" (pull + down + up)'
+    required: false
+    default: 'up'
+  pull_policy:
+    description: 'Arcane pull policy: "if_not_present", "always" or "never"'
+    required: false
+    default: 'if_not_present'
+
+outputs:
+  status:
+    description: 'Status of the deployment'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.arcane_url }}
+    - ${{ inputs.arcane_api_key }}
+    - ${{ inputs.changed_files_path }}
+    - ${{ inputs.environment_file }}
+    - ${{ inputs.deploy_action }}
+    - ${{ inputs.pull_policy }}
